@@ -5,19 +5,41 @@ import java.util.Map;
 
 public class TextProcessor {
     private int wordCount;
-    private Map<Integer, Integer> lengthOccurrence = new HashMap<>();
-    private Integer mostCommonLength;
-    private ArrayList<Integer> mostCommonWords = new ArrayList<>();
+    private Map<Integer, Integer> wordLengths = new HashMap<>();
+    private Integer commonLengths;
+    private ArrayList<Integer> commonWords = new ArrayList<>();
 
-    public TextProcessor(int wordCount, Map<Integer, Integer> lengthOccurrence, float average, Integer mostCommonLength, ArrayList<Integer> mostCommonWords) {
+    public TextProcessor(int wordCount, Map<Integer, Integer> wordLengths, Integer commonLengths, ArrayList<Integer> commonWords) {
         this.wordCount = wordCount;
-        this.lengthOccurrence = lengthOccurrence;
-        this.mostCommonLength = mostCommonLength;
-        this.mostCommonWords = mostCommonWords;
+        this.wordLengths = wordLengths;
+        this.commonLengths = commonLengths;
+        this.commonWords = commonWords;
     }
 
     public TextProcessor() {
 
+    }
+
+    public void fillCommonWordsAndCommonLength() {
+        Integer mostCommonLengthOccurrence = Collections.max(getWordLengths().values());
+        for (Map.Entry<Integer, Integer> entry : getWordLengths().entrySet()) {
+            if(entry.getValue() == mostCommonLengthOccurrence) {
+                getCommonWords().add(entry.getKey());
+                setCommonLengths(entry.getValue());
+            }
+        }
+    }
+
+    public float getAverageWordLength() {
+        float totalWordLength = 0;
+        float keyXValue = 0;
+
+        for (Integer key : getWordLengths().keySet()) {
+            totalWordLength += getWordLengths().get(key);
+            keyXValue += key * getWordLengths().get(key);
+        }
+
+        return (keyXValue/totalWordLength);
     }
 
     public int getWordCount() {
@@ -28,32 +50,21 @@ public class TextProcessor {
         this.wordCount = wordCount;
     }
 
-    public Map<Integer, Integer> getLengthOccurrence() {
-        return lengthOccurrence;
+    public Map<Integer, Integer> getWordLengths() {
+        return wordLengths;
     }
 
-    public float getAverage() {
-        float totalWordLength = 0;
-        float keyXValue = 0;
-
-        for (Integer key : getLengthOccurrence().keySet()) {
-            totalWordLength += getLengthOccurrence().get(key);
-            keyXValue += key * getLengthOccurrence().get(key);
-        }
-
-        float average = (keyXValue/totalWordLength);
-        return average;
+    public Integer getCommonLengths() {
+        return commonLengths;
     }
 
-    public Integer getMostCommonLength() {
-        return mostCommonLength;
+    public void setCommonLengths(Integer commonLengths) {
+        this.commonLengths = commonLengths;
     }
 
-    public void setMostCommonLength(Integer mostCommonLength) {
-        this.mostCommonLength = mostCommonLength;
+    public ArrayList<Integer> getCommonWords() {
+        return commonWords;
     }
 
-    public ArrayList<Integer> getMostCommonWords() {
-        return mostCommonWords;
-    }
+
 }
